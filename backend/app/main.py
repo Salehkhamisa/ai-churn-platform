@@ -9,30 +9,13 @@ import os
 
 app = FastAPI(title="AI Churn Prediction Platform", version="1.0.0")
 
-origins = [
-    "http://localhost:3000",
-    "https://ai-churn-platform-iota.vercel.app",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.options("/{rest_of_path:path}")
-async def preflight_handler(rest_of_path: str, request: Request):
-    return JSONResponse(
-        content={},
-        headers={
-            "Access-Control-Allow-Origin": str(request.headers.get("origin", "*")),
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Credentials": "true",
-        },
-    )
 
 @app.on_event("startup")
 async def startup_event():
